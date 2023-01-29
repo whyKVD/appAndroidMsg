@@ -27,25 +27,6 @@
         android:layout_marginTop="50dp"
         android:layout_toRightOf="@id/connect"/>
     </RelativeLayout>
-    <EditText
-        android:id="@+id/serverName"
-        android:hint="server name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:layout_centerHorizontal="true"/>
-
-    <EditText
-        android:id="@+id/port"
-        android:hint="port"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:layout_marginTop="50dp"
-        android:layout_below="@id/serverName"
-        android:layout_centerHorizontal="true"/>
 
     <EditText
         android:id="@+id/username"
@@ -55,7 +36,6 @@
         android:ems="10"
         android:inputType="text"
         android:layout_marginTop="50dp"
-        android:layout_below="@id/port"
         android:layout_centerHorizontal="true"/>
 
     <Button
