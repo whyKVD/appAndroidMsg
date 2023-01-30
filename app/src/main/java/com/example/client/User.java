@@ -3,41 +3,38 @@ package com.example.client;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import com.google.gson.Gson;
 
 public class User implements Parcelable {
-    private String firstname, lastName, ip;
+    private String firstname, lastname, ip;
+
+    private boolean online;
 
     public User(String name, String lastName, String ip) {
         this.firstname = name;
-        this.lastName = lastName;
+        this.lastname = lastName;
         this.ip = ip;
+        this.online = true;
     }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public String getJson(){
-        return new Gson().toJson(this);
-    }
-
-    
 
     protected User(Parcel in) {
         firstname = in.readString();
-        lastName = in.readString();
+        lastname = in.readString();
         ip = in.readString();
+        online = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(firstname);
+        dest.writeString(lastname);
+        dest.writeString(ip);
+        dest.writeByte((byte) (online ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -52,15 +49,9 @@ public class User implements Parcelable {
         }
     };
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getJson(){
+        return new Gson().toJson(this);
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeString(firstname);
-        parcel.writeString(lastName);
-        parcel.writeString(ip);
-    }
+
 }

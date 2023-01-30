@@ -5,44 +5,55 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-public class Client extends Thread{
+public class Client{
     private String message = null;
 
-    private String SERVERNAME = "129.152.16.174";
-    private int port = 9999;
-    private String userName = "";
+    private Exception e = null;
 
-    private Gestore gestore = null;
+    private final String SERVERNAME = "129.152.16.174";
+    private final int port = 9999;
+    private String userName;
+
+    private Gestore gestore;
 
     private PrintStream out = null;
     private Socket s = null;
     private BufferedReader br = null;
-    private String prev = "";
 
     public Client(String aUname, Gestore gestore) {
         this.userName = aUname;
         this.gestore = gestore;
+
 
         try {
             this.s = new Socket(this.SERVERNAME, this.port);
             this.br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             this.out = new PrintStream(s.getOutputStream());
 
-            start();
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (true) {
-                            if (br != null) {
-                                String msg = br.readLine();
-                                Client.this.gestore.add(msg, "from");
-                            }
+            //sender
+            new Thread(() -> {
+                try {
+                    while(true) {
+                        if (message != null) {
+                            Client.this.out.println(message);
+                            String show = "msgfrm " + userName + ": " + message;
+                            Client.this.gestore.add(show, "to");
+                            message = null;
                         }
-                    } catch (Exception e) {
                     }
-                }
+                }catch(Exception e){}
+            }).start();
+
+            //receiver
+            new Thread(() -> {
+                try {
+                    while (true) {
+                        if (br != null) {
+                            String msg = br.readLine();
+                            Client.this.gestore.add(msg, "from");
+                        }
+                    }
+                } catch (Exception e) {}
             }).start();
         }catch(Exception e){}
     }
@@ -52,16 +63,17 @@ public class Client extends Thread{
     }
 
     @Override
-    public void run() {
-        try {
-            while(true){
-                if(message != null){
-                    this.out.println(message);
-                    String show = "msgfrm "+userName+": "+message;
-                    Client.this.gestore.add(show, "to");
-                    message = null;
-                }
-            }
-        }catch(Exception e){}
+    public String toString() {
+        return "Client{" +
+                "message='" + message + '\'' +
+                ", e=" + e +
+                ", SERVERNAME='" + SERVERNAME + '\'' +
+                ", port=" + port +
+                ", userName='" + userName + '\'' +
+                ", gestore=" + gestore +
+                ", out=" + out +
+                ", s=" + s +
+                ", br=" + br +
+                '}';
     }
 }

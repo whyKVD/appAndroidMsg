@@ -1,9 +1,6 @@
 package com.example.client;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,15 +15,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Gestore {
 
-    private AppCompatActivity activity = null;
+    private AppCompatActivity activity;
+
+    private LinkedList<Contatto> contatti = new LinkedList<>();
 
     private BgTask runningTask = null;
 
-    public Gestore(){}
+    private Client client = null;
 
     public Gestore(AppCompatActivity aAppCompatActivity){
         this.activity = aAppCompatActivity;
@@ -40,10 +40,9 @@ public class Gestore {
         Button send = this.activity.findViewById(R.id.send);
         EditText msg = this.activity.findViewById(R.id.msg);
         Bundle extras = this.activity.getIntent().getExtras();
-        Client client = new Client(extras.getString("username"),this);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        this.startBgTask("client",extras.getString("username"));
+        send.setOnClickListener(view -> {
+            if (!msg.getText().toString().matches("")) {
                 client.sendMsg(msg.getText().toString());
                 msg.setText("");
             }
@@ -51,7 +50,7 @@ public class Gestore {
     }
 
     public void newUser(String name, String lastName) {
-        String ip = null;
+        String ip;
         String uName = name;
         String uLastName = lastName;
         try (Scanner s = new java.util.Scanner(new URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
@@ -76,7 +75,7 @@ public class Gestore {
             try(BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), "utf-8"))) {
                 StringBuilder response = new StringBuilder();
-                String responseLine = null;
+                String responseLine;
                 while ((responseLine = br.readLine()) != null) {
                     response.append(responseLine.trim());
                 }
@@ -84,16 +83,15 @@ public class Gestore {
         }catch (Exception e){}
     }
 
-    public void startBgTask(String params){
+    public void startBgTask(String... params){
         if(runningTask != null){
-            runningTask.cancel(true);
+            runningTask = null;
         }
-        runningTask = new BgTask();
-        runningTask.execute(params);
+        runningTask = new BgTask(this,params);
     }
 
     public String getContatti() {
-        String data = "";
+        String data;
         try {
             String txt = "";
             String url_str = "http://129.152.16.174:8888/person";
@@ -113,72 +111,28 @@ public class Gestore {
         return data;
     }
 
-    private void populate(String data) {
+    public void populate(String data) {
         LinearLayout  layoutContatti = this.activity.findViewById(R.id.area_contatti);
         try {
             JSONArray js = new JSONArray(data);
             for (int i = 0; i<js.length(); i++){
                 JSONObject value = js.getJSONObject(i);
                 Contatto c = new Contatto(value.getString("firstname")+" "+value.getString("lastname"), (ContattiActivity) this.activity);
+                contatti.add(c);
                 layoutContatti.addView(c.getView());
             }
         }catch (Exception e){}
     }
 
     public void add(String aTesto, String card){
-        LinearLayout layout = this.activity.findViewById(R.id.messageArea);
-        this.activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Message m = new Message(aTesto,card, (MsgActivity) Gestore.this.activity);
-                layout.addView(m.getView());
-            }
+        LinearLayout layout = ((MsgActivity)this.activity).findViewById(R.id.messageArea);
+        this.activity.runOnUiThread(() -> {
+            Message m = new Message(aTesto,card, (MsgActivity) Gestore.this.activity);
+            layout.addView(m.getView());
         });
     }
 
-    private class BgTask extends AsyncTask<String, Void, String> {
-        private ProgressDialog progressDialog = null;
-
-        private String action = null;
-
-        private String data = null;
-
-        @Override
-        protected String doInBackground(String... params) {
-            //Start loading your data
-            switch (params[0]){
-                case "populate":
-                    this.action = params[0];
-                    this.data = getContatti();
-                    break;
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //Update your UI with data you loaded/start your activity with loaded data
-            switch (action){
-                case "populate":
-                    populate(result);
-                    break;
-                default:
-                    break;
-            }
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();            // display a progress dialog for good user experiance
-            progressDialog = new ProgressDialog(Gestore.this.activity);
-            progressDialog.setMessage("Fetching data...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

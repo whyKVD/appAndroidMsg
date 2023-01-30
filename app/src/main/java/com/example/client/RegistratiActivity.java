@@ -1,7 +1,6 @@
 package com.example.client;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -22,13 +21,8 @@ public class RegistratiActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         lastName = findViewById(R.id.lastname);
         submit = findViewById(R.id.submit);
-        gestore = new Gestore();
+        gestore = new Gestore(this);
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gestore.newUser(name.getText().toString(), lastName.getText().toString());
-            }
-        });
+        submit.setOnClickListener(view -> gestore.startBgTask("newUser",name.getText().toString(), lastName.getText().toString()));
     }
 }
