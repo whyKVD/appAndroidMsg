@@ -17,7 +17,7 @@ public class BgTask {
             switch (params[0]) {
                 case "populate":
                     BgTask.this.action = params[0];
-                    BgTask.this.data = g.getContatti();
+                    //BgTask.this.data = g.getContatti();
                     break;
                 case "client":
                     BgTask.this.action = params[0];
@@ -25,7 +25,7 @@ public class BgTask {
                     break;
                 case "newUser":
                     BgTask.this.action = params[0];
-                    g.newUser(params[1], params[2]);
+                    //g.newUser(params[1], params[2]);
                     break;
                 default:
                     break;
@@ -34,7 +34,7 @@ public class BgTask {
             handler.post(() ->{
                 switch (action){
                     case "populate":
-                        g.populate(data);
+                        //g.populate(data);
                         break;
                     default:
                         break;

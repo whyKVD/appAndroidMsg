@@ -6,46 +6,50 @@
     tools:context=".MainActivity"
     android:gravity="center">
 
-    <RelativeLayout
-        android:id="@+id/bottoni"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_below="@id/username">
-    <Button
-        android:id="@+id/connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="connect"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"/>
-    <Button
-        android:id="@+id/contatti"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="contatti"
-        android:layout_marginTop="50dp"
-        android:layout_toRightOf="@id/connect"/>
-    </RelativeLayout>
-
     <EditText
         android:id="@+id/username"
-        android:hint="username"
+        android:hint="@string/username"
+        android:autofillHints="username"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:ems="10"
         android:inputType="text"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"/>
 
-    <Button
+    <!--<RelativeLayout
+        android:id="@+id/bottoni"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/username">-->
+        <Button
+            android:id="@+id/connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connect"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_below="@id/username"
+            android:layout_centerHorizontal="true"/>
+
+        <!--<Button
+            android:id="@+id/contatti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="contatti"
+            android:layout_marginTop="50dp"
+            android:layout_toRightOf="@id/connect"/>
+    </RelativeLayout>-->
+
+    <!--<Button
         android:id="@+id/iscriviti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="connect"
+        android:text="iscriviti"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:layout_below="@id/bottoni"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"/>-->
 
 </RelativeLayout>

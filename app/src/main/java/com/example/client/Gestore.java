@@ -7,16 +7,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 public class Gestore {
 
@@ -48,7 +39,7 @@ public class Gestore {
             }
         });
     }
-
+/*
     public void newUser(String name, String lastName) {
         String ip;
         String uName = name;
@@ -82,14 +73,14 @@ public class Gestore {
             }
         }catch (Exception e){}
     }
-
+*/
     public void startBgTask(String... params){
         if(runningTask != null){
             runningTask = null;
         }
         runningTask = new BgTask(this,params);
     }
-
+/*
     public String getContatti() {
         String data;
         try {
@@ -123,7 +114,7 @@ public class Gestore {
             }
         }catch (Exception e){}
     }
-
+*/
     public void add(String aTesto, String card){
         LinearLayout layout = ((MsgActivity)this.activity).findViewById(R.id.messageArea);
         this.activity.runOnUiThread(() -> {

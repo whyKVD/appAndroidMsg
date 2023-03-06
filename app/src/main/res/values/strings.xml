@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Client</string>
+    <string name="connect">connect</string>
+    <string name="username">username</string>
 </resources>

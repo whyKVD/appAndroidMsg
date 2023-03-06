@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         username = findViewById(R.id.username);
         connect = findViewById(R.id.connect);
-        contatti = findViewById(R.id.contatti);
+        /*contatti = findViewById(R.id.contatti);
         iscriviti = findViewById(R.id.iscriviti);
 
         iscriviti.setOnClickListener(new View.OnClickListener() {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(reg);
                 finish();
             }
-        });
+        });*/
 
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,13 +39,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        contatti.setOnClickListener(new View.OnClickListener() {
+        /*contatti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent cont = new Intent(MainActivity.this, ContattiActivity.class);
                 startActivity(cont);
             }
-        });
+        });*/
     }
 
     private void startMsgActivity() {
